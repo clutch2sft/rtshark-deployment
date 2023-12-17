@@ -1,0 +1,10 @@
+---
+# roles/scripts-setup/tasks/main.yml
+
+- name: Copy scripts to /usr/local/bin
+  copy:
+    src: "{{ item }}"
+    dest: "/usr/local/bin/{{ item | basename }}"
+    mode: '0755'
+  with_fileglob:
+    - ../files/*  # Copies all scripts from the 'files' directory

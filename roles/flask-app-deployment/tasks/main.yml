@@ -1,0 +1,42 @@
+---
+# roles/flask-app-deployment/tasks/main.yml
+# roles/flask-app-deployment/tasks/main.yml
+
+- name: Create Python virtual environment
+  command: python3 -m venv /opt/rtshark-app/venv
+  args:
+    creates: /opt/rtshark-app/venv
+
+- name: Install Python dependencies in the virtual environment
+  pip:
+    name:
+      - flask
+      - flask_login
+      - ansi2html
+      - gunicorn
+    virtualenv: /opt/rtshark-app/venv
+    virtualenv_command: python3 -m venv
+
+- name: Ensure rtshark owns the virtual environment
+  file:
+    path: /opt/rtshark-app/venv
+    state: directory
+    owner: rtshark
+    group: rtshark
+    recurse: yes
+
+- name: Copy Flask application files
+  copy:
+    src: "{{ item }}"
+    dest: /opt/rtshark-app/
+    owner: rtshark
+    group: rtshark
+  with_fileglob:
+    - files/*  # Copies app.py and models.py
+
+- name: Copy Flask template files
+  template:
+    src: "{{ item }}"
+    dest: /opt/rtshark-app/templates/
+  with_fileglob:
+    - templates/*  # Copies all template files

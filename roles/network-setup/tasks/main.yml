@@ -1,0 +1,25 @@
+- name: Create bridge br0
+  community.general.nmcli:
+    conn_name: br0
+    ifname: br0
+    type: bridge
+    state: present
+    autoconnect: yes
+
+- name: Add eth0 as a slave to br0
+  community.general.nmcli:
+    conn_name: br-slave1
+    ifname: eth0
+    type: bridge-slave
+    master: br0
+    state: present
+    autoconnect: yes
+
+- name: Add lan0 as a slave to br0
+  community.general.nmcli:
+    conn_name: br-slave2
+    ifname: lan0
+    type: bridge-slave
+    master: br0
+    state: present
+    autoconnect: yes

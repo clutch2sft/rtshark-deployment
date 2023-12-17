@@ -1,0 +1,9 @@
+- name: Install OS dependencies
+  apt:
+    name:
+      - supervisor
+      - python3
+      - python3.11-venv
+      - tshark
+      - nginx
+    state: present

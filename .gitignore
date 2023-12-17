@@ -1,0 +1,47 @@
+# Standard Visual Studio Code exclusions
+.vscode/
+*.code-workspace
+
+# Python-related exclusions (common in Ansible projects)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ansible-related exclusions
+*.retry
+
+# Exclude Ansible Vault password file
+.vault_password_file
+
+# Exclude any secret files that might contain sensitive information
+secrets.yml
+*.vault
+
+# Node modules and log files
+node_modules/
+npm-debug.log*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

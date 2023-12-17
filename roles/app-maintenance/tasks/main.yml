@@ -1,0 +1,5 @@
+- name: Set up cleanup captures cron job
+  cron:
+    name: "Cleanup captures"
+    job: "/usr/local/bin/cleanup_captures.sh >> /var/log/cleanup_captures.log 2>&1"
+    minute: "*/2"

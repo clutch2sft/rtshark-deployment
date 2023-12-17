@@ -1,0 +1,13 @@
+[Unit]
+Description=Set Safe IP Address on Boot
+Wants=network-pre.target NetworkManager.service
+After=NetworkManager.service
+Before=network-pre.target network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/boot-ip-reset.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

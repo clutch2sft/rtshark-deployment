@@ -1,0 +1,19 @@
+- name: Create user rtshark
+  user:
+    name: rtshark
+    system: yes
+    home: /opt/rtshark-app
+    shell: /sbin/nologin
+
+- name: Set permissions for /opt/rtshark-app
+  file:
+    path: /opt/rtshark-app
+    owner: rtshark
+    group: rtshark
+    recurse: yes
+
+- name: Grant sudo rights to rtshark
+  lineinfile:
+    path: /etc/sudoers
+    line: 'rtshark ALL=(ALL) NOPASSWD: /bin/systemctl start tshark.service, /bin/systemctl stop tshark.service, /bin/systemctl status tshark.service --no-pager'
+    validate: '/usr/sbin/visudo -cf %s'

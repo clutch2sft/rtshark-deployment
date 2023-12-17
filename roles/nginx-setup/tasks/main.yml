@@ -1,0 +1,16 @@
+- name: Generate SSL certificate
+  community.crypto.openssl_req:
+    path: /etc/ssl/certs/nginx-selfsigned.crt
+    privatekey_path: /etc/ssl/private/nginx-selfsigned.key
+    common_name: your.domain.com
+    # ... other openssl options
+
+- name: Deploy Nginx configuration
+  template:
+    src: files/default.conf
+    dest: /etc/nginx/sites-available/default
+
+- name: Reload Nginx
+  systemd:
+    name: nginx
+    state: reloaded
