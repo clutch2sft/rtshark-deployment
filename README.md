@@ -60,3 +60,69 @@ Purpose: This file is an include (inc) file containing common settings and varia
 
 Deployment: This file is placed in a directory (/usr/local/bin) where it can be sourced by the bash scripts used for network monitoring, packet capturing, and other system-level operations. The scripts refer to this file for necessary configuration values, ensuring that they operate with the desired settings.
 These configuration files are integral to the flexibility and functionality of rtshark-app, allowing for easy customization and management of both the application and the underlying scripts. Modifying these files enables users to tailor the application to their specific network environments and use cases.
+
+
+---
+
+## How to Deploy rtshark-app
+
+This guide outlines the deployment process of the `rtshark-app` on an Orange Pi R1 Plus device running Ubuntu 20.04.6 (Codename: focal). This deployment is performed remotely from another PC using Ansible. It is assumed that you have already set up your Orange Pi device with the necessary operating system and it is ready for SSH connections.
+
+**Note**: This deployment process has been tested on the Orange Pi R1 Plus. If you are using a different device or OS version, some steps may vary.
+
+### Prerequisites
+- An Orange Pi R1 Plus device with Ubuntu 20.04.6 installed and accessible via SSH.
+- A PC with Ansible installed, from which the deployment will be performed.
+- Basic familiarity with Ansible, SSH, and Linux command line.
+
+### Deployment Steps
+
+1. **Prepare Your Hosts File**:
+   On your PC (the one running Ansible), create or edit the `hosts` file within the Ansible directory to include the IP address of your Orange Pi device. This file tells Ansible where to deploy the application.
+
+   Example `hosts` file entry:
+   ```ini
+   [opi_devices]
+   orange_pi_ip ansible_user=your_ssh_user ansible_ssh_private_key_file=/path/to/your/private/key
+   ```
+
+2. **Clone the Repository**:
+   Clone the `rtshark-app` GitHub repository to your PC.
+
+   ```bash
+   git clone https://github.com/clutch2sft/rtshark-deployment.git
+   cd rtshark-deployent
+   ```
+
+3. **Configure Secrets**:
+   Edit the `secrets.yml` file in the repository to define the `admin_password`. This file contains sensitive information and will be encrypted with Ansible Vault.
+
+   ```yaml
+   admin_password: "your_strong_password"
+   ```
+
+   Encrypt the `secrets.yml` file using Ansible Vault:
+
+   ```bash
+   ansible-vault encrypt secrets.yml
+   ```
+
+4. **Run Ansible Playbook**:
+   Execute the Ansible playbook to deploy the `rtshark-app` on your Orange Pi device. The playbook will handle environment setup, dependency installation, configuration, and starting the application.
+
+   ```bash
+   ansible-playbook -i hosts ./playbooks/main.yml --vault-password-file /path/to/vault_password_file
+   ```
+
+5. **Verify Deployment**:
+   After the playbook finishes, verify that the `rtshark-app` is running correctly on your Orange Pi device. You can do this by checking the status of the services using systemd commands or by accessing the web interface through the device's IP address.
+
+6. **Post-Deployment Configuration (Optional)**:
+   You can further customize settings by editing the `rtshark_conf.ini` file and other configurations as necessary for your specific network setup.
+
+### Conclusion
+With these steps, you should have the `rtshark-app` successfully deployed and running on your Orange Pi R1 Plus. This setup provides a comprehensive network monitoring and packet capturing solution, ideal for troubleshooting and analysis in various network environments.
+
+**Disclaimer**: This guide assumes a certain level of technical proficiency in Ansible and Linux systems. The provided instructions are for guidance and may require adjustments to fit your specific hardware and software configurations.
+
+---
