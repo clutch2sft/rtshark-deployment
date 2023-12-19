@@ -1,5 +1,9 @@
 rtshark-app
 
+I developed rtshark-app with the specific purpose of facilitating on-site network diagnostics and remote monitoring, particularly for scenarios requiring a portable and deployable packet capture solution. This application is optimized for devices like the Orange Pi R1 and Raspberry Pi, which are ideal for situations where a compact, yet capable, network analysis tool is necessary.
+
+A key feature of rtshark-app is its ability to create a bridge interface that combines two Ethernet interfaces. This functionality allows the device to act as an Ethernet tap, seamlessly integrating into a network for efficient packet capturing. This design choice caters to the needs of network troubleshooting, especially in mobile setups or environments where leaving a dedicated network monitoring device is required.
+
 rtshark-app is a comprehensive network monitoring solution designed to facilitate real-time packet capturing and analysis on network interfaces. Built on top of the powerful tshark utility, this Flask-based web application offers a user-friendly interface for managing and monitoring network traffic. Key features include starting and stopping packet capture, setting filters for specific IP addresses, and downloading captured packets for in-depth analysis.
 
 Key Features
@@ -36,8 +40,7 @@ TODO:
 Add addtional auth methods to the app to remove static authentication passwords
 Allow capture interface selection
 Allow online edit of filter ip's
+Address the option to not install a bridge when you want capture on a stick
 
 
-Requires:
-ansible-galaxy collection install community.crypto
 
