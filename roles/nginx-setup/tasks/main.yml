@@ -1,9 +1,15 @@
-- name: Generate SSL certificate
-  community.crypto.openssl_req:
+- name: Generate OpenSSL Private Key
+  community.crypto.openssl_privatekey:
+    path: /etc/ssl/private/nginx-selfsigned.key
+    type: RSA
+    size: 4096  # You can choose the key size
+
+- name: Generate a Self-Signed OpenSSL Certificate
+  community.crypto.x509_certificate:
     path: /etc/ssl/certs/nginx-selfsigned.crt
     privatekey_path: /etc/ssl/private/nginx-selfsigned.key
-    common_name: your.domain.com
-    # ... other openssl options
+    provider: selfsigned
+
 
 - name: Deploy Nginx configuration
   template:

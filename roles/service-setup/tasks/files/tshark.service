@@ -1,16 +1,4 @@
 [Unit]
-Description=IP Conflict Monitor
-After=network.target
-
-[Service]
-ExecStart=/usr/local/bin/my-ip-monitor.sh
-Restart=on-failure
-RestartSec=3
-
-[Install]
-WantedBy=multi-user.target
-root@opi01-manb-lab:/etc/systemd/system# cat tshark.service
-[Unit]
 Description=TShark network capture service
 After=network.target
 
@@ -21,3 +9,5 @@ User=root
 
 [Install]
 WantedBy=multi-user.target
+
+

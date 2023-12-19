@@ -5,6 +5,16 @@ CONFIG_FILE="/opt/rtshark-app/.config/rtshark_conf.ini"
 
 mkdir -p /captures
 
+# Get the directory where the script is located
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+if [[ -f "$DIR/rtshark-scripts-settings.inc" ]]; then
+    # shellcheck disable=SC1091
+    . "$DIR/rtshark-scripts-settings.inc"
+else
+    echo "Error: rtshark-scripts-settings.inc not found."
+    exit 1
+fi
 
 # read_ips_from_ini() {
 #     local ini_file="/opt/rtshark-app/.config/tshark_filter.ini"
@@ -83,7 +93,7 @@ construct_ip_filter() {
 
 
 FILENAME_PREFIX=$(read_config_value "General" "filename_prefix" "default")
-IP_ADDRESSES=$(read_config_value "Network" "ip_addresses" "")
+IP_ADDRESSES=$(read_config_value "Filter Addresses" "ip_addresses" "")
 
 
 
@@ -97,7 +107,7 @@ cleanup() {
 }
 trap cleanup SIGTERM
 # Get the IP address of br0
-IP_ADDR=$(ip addr show eth0 | grep 'inet ' | awk '{print $2}' | cut -d/ -f1)
+IP_ADDR=$(ip addr show $INTERFACE | grep 'inet ' | awk '{print $2}' | cut -d/ -f1)
 
 # Get the dynamically constructed IP address filter
 #IP_FILTER=$(read_ips_from_ini)
@@ -125,8 +135,6 @@ HOSTNAME=$(hostname)
 # Define the path for the capture file with the hostname
 CAPTURE_PATH="/captures/$FILENAME_PREFIX-capture_${HOSTNAME}.pcap"
 
-FILE_SIZE_LIMIT=76800  # In kilobytes, for 75MB
-MAX_FILES=200            # Maximum number of files to keep
 #BUFFER_SIZE=150     # Buffer size in MB
 #BUFFER_SIZE=1
 
@@ -154,5 +162,5 @@ echo "$CAPTURE_FILTER"
 #echo $_COMMAND
 
 # Run tshark with the necessary options
-/usr/bin/tshark -i eth0 -f "$CAPTURE_FILTER" -b filesize:$FILE_SIZE_LIMIT -b files:$MAX_FILES -w $CAPTURE_PATH -B $BUFFER_SIZE
+/usr/bin/tshark -i $INTERFACE -f "$CAPTURE_FILTER" -b filesize:$FILE_SIZE_LIMIT -b files:$MAX_FILES -w $CAPTURE_PATH -B $BUFFER_SIZE
 #/usr/bin/tshark -i eth0 -f "$CAPTURE_FILTER" -b filesize:$FILE_SIZE_LIMIT -b files:$MAX_FILES -w $CAPTURE_PATH

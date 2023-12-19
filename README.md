@@ -5,4 +5,6 @@ TODO:
 Add addtional auth methods to the app to remove static authentication passwords
 Make IP Filter more generic as it is currently designed for a specfic application
 
+Requires:
+ansible-galaxy collection install community.crypto
 

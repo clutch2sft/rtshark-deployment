@@ -7,7 +7,7 @@ LOG_LEVEL_WARN=2
 LOG_LEVEL_ERROR=3
 
 # Set the minimum log level for messages to be recorded
-MIN_LOG_LEVEL=$LOG_LEVEL_INFO
+MIN_LOG_LEVEL=$LOG_LEVEL_DEBUG
 
 # Function to send logs to syslog
 # Now accepts an additional argument for the script name

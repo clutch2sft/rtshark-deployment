@@ -1,14 +1,21 @@
 # roles/supervisor-setup/tasks/main.yml
 - name: Check if rtshark.conf exists and get SECRET_KEY
-  shell: grep 'SECRET_KEY' /etc/supervisor/conf.d/rtshark.conf || true
+  shell: grep 'SECRET_KEY' /etc/supervisor/conf.d/rtshark.conf | cut -d '"' -f 2 || true
   register: existing_secret_key
   changed_when: false
   ignore_errors: true
+
+# - debug:
+#     var: existing_secret_key.stdout
 
 - name: Generate a new Flask SECRET_KEY
   shell: openssl rand -hex 24
   register: generated_secret_key
   when: existing_secret_key.stdout == ""
+
+# - debug:
+#     var: generated_secret_key.stdout
+
 
 - name: Deploy Supervisor configuration for rtshark-app
   template:

@@ -32,7 +32,7 @@ var/
 # Exclude any secret files that might contain sensitive information
 secrets.yml
 *.vault
-
+ansible_output*
 # Node modules and log files
 node_modules/
 npm-debug.log*

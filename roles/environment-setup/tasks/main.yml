@@ -3,7 +3,46 @@
     name:
       - supervisor
       - python3
-      - python3.11-venv
+      - python3-venv
+      - python3-pip
       - tshark
       - nginx
     state: present
+
+- name: Ensure rtshark-app log directory exists
+  ansible.builtin.file:
+    path: /var/log/rtshark-app
+    state: directory
+    owner: rtshark
+    group: rtshark
+    mode: '0755'
+
+- name: Ensure rtshark-app error log file exists
+  ansible.builtin.file:
+    path: /var/log/rtshark-app/rtshark-app.err.log
+    state: touch
+    owner: rtshark
+    group: rtshark
+    mode: '0644'
+
+- name: Ensure rtshark-app output log file exists
+  ansible.builtin.file:
+    path: /var/log/rtshark-app/rtshark-app.out.log
+    state: touch
+    owner: rtshark
+    group: rtshark
+    mode: '0644'
+
+- name: Ensure rtshark-app in app log file exists
+  ansible.builtin.file:
+    path: /var/log/rtshark-app/inapplog.log
+    state: touch
+    owner: rtshark
+    group: rtshark
+    mode: '0644'
+
+- name: Ensure cryptography is installed
+  ansible.builtin.pip:
+    name: cryptography
+    state: present
+

@@ -2,29 +2,43 @@
 
 
 # Source the logging functions
-. ./logging.inc
 
+# Get the directory where the script is located
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Define the bridge interface
-interface="br0"
+if [[ -f "$DIR/logging.inc" ]]; then
+    # shellcheck disable=SC1091
+    . "$DIR/logging.inc"
+else
+    echo "Error: logging.inc not found."
+    exit 1
+fi
+
+if [[ -f "$DIR/rtshark-scripts-settings.inc" ]]; then
+    # shellcheck disable=SC1091
+    . "$DIR/rtshark-scripts-settings.inc"
+else
+    echo "Error: rtshark-scripts-settings.inc not found."
+    exit 1
+fi
 
 # Check if the interface is already up
-if nmcli device status | grep -q "$interface.*connected"; then
-    log_message "boot-ip-reset" "INFO" "Interface '$interface' is already up. No action taken."
+if nmcli device status | grep -q "$INTERFACE.*connected"; then
+    log_message "boot-ip-reset" "INFO" "Interface '$INTERFACE' is already up. No action taken."
 else
     # Set the interface to use DHCP
-    nmcli con down $interface
-    log_message "boot-ip-reset" "DEBUG" "Interface '$interface' set down."
-    nmcli con mod $interface ipv4.method auto
-    log_message "boot-ip-reset" "DEBUG" "Interface '$interface' set to use DHCP."
-    nmcli con mod $interface ipv4.gateway ""
-    log_message "boot-ip-reset" "DEBUG" "Interface '$interface' ipv4 gateway cleared."
-    nmcli con mod $interface ipv4.addresses ""
-    log_message "boot-ip-reset" "DEBUG" "Interface '$interface' ipv4 addresses cleared.."
-    nmcli con up $interface
-    log_message "boot-ip-reset" "DEBUG" "Interface '$interface' set up."
+    nmcli con down $INTERFACE
+    log_message "boot-ip-reset" "DEBUG" "Interface '$INTERFACE' set down."
+    nmcli con mod $INTERFACE ipv4.method auto
+    log_message "boot-ip-reset" "DEBUG" "Interface '$INTERFACE' set to use DHCP."
+    nmcli con mod $INTERFACE ipv4.gateway ""
+    log_message "boot-ip-reset" "DEBUG" "Interface '$INTERFACE' ipv4 gateway cleared."
+    nmcli con mod $INTERFACE ipv4.addresses ""
+    log_message "boot-ip-reset" "DEBUG" "Interface '$INTERFACE' ipv4 addresses cleared.."
+    nmcli con up $INTERFACE
+    log_message "boot-ip-reset" "DEBUG" "Interface '$INTERFACE' set up."
     #nmcli device connect $interface
-    log_message "boot-ip-reset" "INFO" "Interface '$interface' set to use DHCP."
+    log_message "boot-ip-reset" "INFO" "Interface '$INTERFACE' set to use DHCP."
 fi
 
 exit 0

@@ -25,6 +25,23 @@
     group: rtshark
     recurse: yes
 
+- name: Ensure the Flask templates directory exists
+  ansible.builtin.file:
+    path: /opt/rtshark-app/templates/
+    state: directory
+    owner: rtshark
+    group: rtshark
+    mode: '0755'
+
+- name: Ensure the Flask config directory exists
+  ansible.builtin.file:
+    path: /opt/rtshark-app/.config/
+    state: directory
+    owner: rtshark
+    group: rtshark
+    mode: '0755'
+
+
 - name: Copy Flask application files
   copy:
     src: "{{ item }}"
@@ -34,9 +51,23 @@
   with_fileglob:
     - files/*  # Copies app.py and models.py
 
+
 - name: Copy Flask template files
-  template:
+  copy:
     src: "{{ item }}"
     dest: /opt/rtshark-app/templates/
+    owner: rtshark
+    group: rtshark
+    mode: '0644'
   with_fileglob:
-    - templates/*  # Copies all template files
+    - templates/*  # Copies app.py and models.py
+
+- name: Copy Flask config files
+  copy:
+    src: "{{ item }}"
+    dest: /opt/rtshark-app/.config/
+    owner: rtshark
+    group: rtshark
+    mode: '0644'
+  with_fileglob:
+    - config/*  # Copies app.py and models.py

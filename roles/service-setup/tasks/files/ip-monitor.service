@@ -1,17 +1,4 @@
 [Unit]
-Description=Custom Network Setup Script
-Wants=network-online.target
-After=network-online.target boot-ip-reset.service
-
-[Service]
-Type=oneshot
-ExecStart=/usr/local/bin/find_br0_ip_and_set.sh
-RemainAfterExit=yes
-
-[Install]
-WantedBy=multi-user.target
-root@opi01-manb-lab:/etc/systemd/system# cat ip-monitor.service
-[Unit]
 Description=IP Conflict Monitor
 After=network.target
 

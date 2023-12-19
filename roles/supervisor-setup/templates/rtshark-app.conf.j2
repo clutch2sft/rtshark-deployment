@@ -6,5 +6,6 @@ autorestart=true
 stderr_logfile=/var/log/rtshark-app/rtshark-app.err.log
 stdout_logfile=/var/log/rtshark-app/rtshark-app.out.log
 user=rtshark
-environment=SECRET_KEY="{{ existing_secret_key.stdout | default(generated_secret_key.stdout) }}",ADMIN_PASSWORD="{{ admin_password }}"
+environment=SECRET_KEY="{% if existing_secret_key.stdout %}{{ existing_secret_key.stdout }}{% else %}{{ generated_secret_key.stdout }}{% endif %}", ADMIN_PASSWORD="{{ secrets.admin_password }}"
+
 

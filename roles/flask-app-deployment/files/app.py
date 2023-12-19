@@ -23,7 +23,7 @@ def setup_logging():
 
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'default_password_if_not_set')
+app.secret_key = '561c2fef765bd8f50a5253ac1a4fe77259d86d09e98a05d8176a23d8300202ea'  # Replace with a real secret key
 app.wsgi_app = ProxyFix(app.wsgi_app)
 setup_logging()
 # Flask-Login setup
@@ -97,7 +97,7 @@ def get_config_item(section, option, default=None):
 
 
 def get_selected_ips():
-    ips = get_config_item('Network', 'ip_addresses')
+    ips = get_config_item('Filter Addresses', 'ip_addresses')
     return ips.split(',') if ips else []
 
 def get_filename_prefix():
@@ -114,6 +114,12 @@ def control_service(action, filename_prefix):
         # Stop the tshark service
         subprocess.run(["sudo", "systemctl", "stop", "tshark.service"])
 
+def get_ip_filter_addresses():
+    config = ConfigParser()
+    config.read('./.config/rtshark_conf.ini')
+    if 'Available Filter Addresses' in config:
+        return config['Available Filter Addresses'].items()
+    return []
 
 @app.route('/control_service', methods=['POST'])
 @login_required
@@ -148,7 +154,7 @@ def handle_set_filter():
 
 def set_filter(ip_addresses):
     ip_addresses_str = ','.join(ip_addresses)
-    set_config_item('Network', 'ip_addresses', ip_addresses_str)
+    set_config_item('Filter Addresses', 'ip_addresses', ip_addresses_str)
 
 
 
@@ -200,9 +206,9 @@ def download_file(filename):
 def index():
     app.logger.debug(f"Current user authenticated: {current_user.is_authenticated}")
     selected_ips = get_selected_ips()
+    ip_addresses = get_ip_filter_addresses()
     filename_prefix= get_filename_prefix()
-    return render_template('index.html', filename_prefix=filename_prefix, selected_ips=selected_ips)
-
+    return render_template('index.html', filename_prefix=filename_prefix, selected_ips=selected_ips, ip_addresses=ip_addresses)
 
 
 @app.route('/test')

@@ -1,16 +1,17 @@
----
 # playbooks/main.yml
-
 - hosts: all
+  pre_tasks:
+    - name: Include secrets
+      include_vars:
+        file: ../secrets.yml
+        name: secrets
   become: yes
   roles:
     - environment-setup
-    - supervisor-setup
-    - flask-app-deployment
-    - service-setup
-    - scripts-setup
     - user-setup
-    - app-maintenance
+    - flask-app-deployment
+    - scripts-setup
+    - service-setup
     - nginx-setup
     - app-maintenance
     - supervisor-setup

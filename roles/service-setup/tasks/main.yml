@@ -7,3 +7,19 @@
 - name: Reload systemd
   systemd:
     daemon_reload: yes
+
+- name: Enable boot-ip-reset service
+  systemd:
+    name: boot-ip-reset.service
+    enabled: yes
+
+- name: Enable find_interface_ip_and_set service
+  systemd:
+    name: find_interface_ip_and_set.service
+    enabled: yes
+
+- name: Enable and start ip-monitor service
+  systemd:
+    name: ip-monitor.service
+    enabled: yes
+    state: started

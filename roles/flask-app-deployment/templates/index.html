@@ -7,7 +7,7 @@
     <h1>Tshark Service Control</h1>
     {% if selected_ips %}
         <div>
-            <h3>Currently Selected IP Addresses:</h3>
+            <h3>Currently Selected Filter IP Addresses:</h3>
             <p>{{ selected_ips|join(', ') }}</p>
         </div>
     {% endif %}
@@ -41,55 +41,19 @@
     </div>
     <!-- IP Address Selection with Checkboxes -->
     <div class="form-section">
-        <form action="/set_filter" method="post" >
+        <form action="/set_filter" method="post">
             <fieldset>
-                <legend>Select AGVs to filter on:</legend>
+                <legend>Select Device/IP to filter on:</legend>
+                {% for ip, label in ip_addresses %}
                 <div>
-                    <input type="checkbox" id="ip1" name="ip_addresses" value="120.13.212.31">
-                    <label for="ip1">AGV 002</label>
+                    <input type="checkbox" id="ip_{{ loop.index }}" name="ip_addresses" value="{{ ip }}">
+                    <label for="ip_{{ loop.index }}">{{ label }}-->{{ip}}</label>
                 </div>
-                <div>
-                    <input type="checkbox" id="ip2" name="ip_addresses" value="120.13.212.50">
-                    <label for="ip2">AGV 021</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="ip3" name="ip_addresses" value="120.13.212.56">
-                    <label for="ip3">AGV 027</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="ip4" name="ip_addresses" value="120.13.212.72">
-                    <label for="ip4">AGV 043</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="ip5" name="ip_addresses" value="120.13.212.85">
-                    <label for="ip5">AGV 056</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="ip6" name="ip_addresses" value="120.13.212.91">
-                    <label for="ip6">AGV 062</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="ip7" name="ip_addresses" value="120.13.212.104">
-                    <label for="ip7">AGV 075</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="ip8" name="ip_addresses" value="120.13.212.107">
-                    <label for="ip8">AGV 078</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="ip9" name="ip_addresses" value="120.13.212.167">
-                    <label for="ip9">AGV 138</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="ip10" name="ip_addresses" value="120.13.212.212">
-                    <label for="ip10">AGV 183</label>
-                </div>
-                <!-- Add more checkboxes as needed -->
+                {% endfor %}
             </fieldset>
             <input type="submit" value="Set Filter" class="button">
         </form>
     </div>
-
 
     <a href="/list_captures" id="downloadButton" class="button"><button>Download Captures</button></a>
 
