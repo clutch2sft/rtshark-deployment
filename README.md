@@ -29,6 +29,10 @@ Robust Logging: Comprehensive logging capabilities for both the application and 
 
 Secure Access: Implementations for secure HTTPS connections and user authentication to ensure controlled and secure access to the application.
 
+
+![Logged In Screenshot](https://github.com/clutch2sft/rtshark-deployment/blob/main/screenshots/loggedin.png)
+
+
 How it Works
 rtshark-app integrates several components to deliver its functionality:
 
