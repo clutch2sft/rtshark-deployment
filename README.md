@@ -123,6 +123,6 @@ This guide outlines the deployment process of the `rtshark-app` on an Orange Pi 
 ### Conclusion
 With these steps, you should have the `rtshark-app` successfully deployed and running on your Orange Pi R1 Plus. This setup provides a comprehensive network monitoring and packet capturing solution, ideal for troubleshooting and analysis in various network environments.
 
-**Disclaimer**: This guide assumes a certain level of technical proficiency in Ansible and Linux systems. The provided instructions are for guidance and may require adjustments to fit your specific hardware and software configurations.
+**Disclaimer**: This guide assumes a certain level of technical proficiency in Ansible and Linux systems. The provided instructions are for guidance and may require adjustments to fit your specific hardware and software configurations.  Additionally, the Ansible deployment process utilizes self-signed SSL certificates. Users are advised to replace these with their own certificates for enhanced security, a process which is beyond the scope of this guide.
 
 ---
