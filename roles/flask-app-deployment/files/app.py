@@ -50,9 +50,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        app.logger.debug(username + ":" + password)
         for user in users:
-            app.logger.debug(user.username + ":" + user.password)
             if user.username == username and user.password == password:
                 app.logger.debug("Should Login")
                 login_user(user, remember=True)
@@ -271,7 +269,8 @@ def test():
 #     return {'status_simple': status_simple, 'status_detail': result.stdout}
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True)
+    app.run()
 
 
 
