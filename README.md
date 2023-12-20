@@ -53,6 +53,42 @@ Overall, `rtshark-app` is designed to be a reliable and user-friendly tool for n
 
 ---
 
+---
+
+## Self-IP Address Assignment and Conflict Resolution in Non-DHCP Environments
+
+The `rtshark-app` is designed to operate effectively in environments where DHCP (Dynamic Host Configuration Protocol) may not be available or reliable. To address this, the application includes a robust self-IP address assignment mechanism, particularly useful in environments where manual IP configuration is necessary. This feature ensures that the device can autonomously select an appropriate IP address and avoid conflicts, even in the absence of DHCP.
+
+### Overview of the Process
+
+The self-IP address assignment is managed by a script, `find_interface_ip_and_set.sh`, which is designed to assign an IP address to the device's network interface (such as `br0`) in environments without DHCP.
+
+1. **Script Initialization**:
+   - The script begins by including necessary configuration and logging files (`logging.inc` and `rtshark-scripts-settings.inc`).
+   - The network interface and IP range for assignment are specified in `rtshark-scripts-settings.inc` or passed as arguments to the script.
+
+2. **IP Range Definition**:
+   - The script defines a range of IP addresses to consider for assignment. This range is set in the configuration file and typically includes a prefix (e.g., `192.168.1.`) and a range of host addresses (e.g., `100-200`).
+
+3. **IP Conflict Detection**:
+   - Using the `arping` tool, the script checks each IP address in the defined range to determine if it is already in use on the network.
+   - The script iterates through different `arping` command variations to ensure compatibility across different Linux distributions and versions of `arping`.
+
+4. **IP Assignment**:
+   - Once an available IP address is found, the script configures the network interface with this new IP address and a corresponding gateway.
+   - The script utilizes `nmcli` commands to bring down the network interface, apply the new IP configuration, and bring the interface back up.
+
+5. **Logging and Monitoring**:
+   - Throughout the process, the script logs relevant information and errors, allowing for monitoring and troubleshooting.
+
+### Benefits
+
+- **Flexibility**: The script can adapt to various network environments, especially those lacking DHCP.
+- **Autonomy**: The device can independently select an IP address, reducing the need for manual configuration.
+- **Reliability**: Continuous monitoring for IP conflicts ensures the device maintains a valid and conflict-free IP address.
+
+---
+
 
 ---
 
