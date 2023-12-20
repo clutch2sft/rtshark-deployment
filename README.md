@@ -20,6 +20,7 @@ In contrast, `rtshark-app` is optimized for simplicity and efficiency. It's inte
 
 A key feature of rtshark-app is its ability to create a bridge interface that combines two Ethernet interfaces. This functionality allows the device to act as an Ethernet tap, seamlessly integrating into a network for efficient packet capturing. This design choice caters to the needs of network troubleshooting, especially in mobile setups or environments where leaving a dedicated network monitoring device is required.
 
+
 ---
 
 ## rtshark-app
@@ -86,9 +87,9 @@ The self-IP address assignment is managed by a script, `find_interface_ip_and_se
 - **Flexibility**: The script can adapt to various network environments, especially those lacking DHCP.
 - **Autonomy**: The device can independently select an IP address, reducing the need for manual configuration.
 - **Reliability**: Continuous monitoring for IP conflicts ensures the device maintains a valid and conflict-free IP address.
+- **Failsafe**: Leverages zerconf if the range of addresses provided are all in use.
 
 ---
-
 
 ---
 
