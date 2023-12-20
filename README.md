@@ -20,8 +20,6 @@ In contrast, `rtshark-app` is optimized for simplicity and efficiency. It's inte
 
 A key feature of rtshark-app is its ability to create a bridge interface that combines two Ethernet interfaces. This functionality allows the device to act as an Ethernet tap, seamlessly integrating into a network for efficient packet capturing. This design choice caters to the needs of network troubleshooting, especially in mobile setups or environments where leaving a dedicated network monitoring device is required.
 
-Certainly! Here's a synopsis for your `rtshark-app` that you can include in your README file:
-
 ---
 
 ## rtshark-app
