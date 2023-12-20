@@ -18,6 +18,15 @@ else
     exit 1
 fi
 
+# Override INTERFACE if an argument is provided
+if [[ -n "$1" ]]; then
+    INTERFACE="$1"
+fi
+
+# Override NETWORK_PREFIX if a second argument is provided
+if [[ -n "$2" ]]; then
+    NETWORK_PREFIX="$2"
+fi
 
 
 run_arping() {

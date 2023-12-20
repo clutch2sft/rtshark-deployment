@@ -19,6 +19,10 @@ else
     exit 1
 fi
 
+if [[ -n "$1" ]]; then
+    INTERFACE="$1"
+fi
+
 run_arping() {
     local ip=$1
     local arping_cmd
