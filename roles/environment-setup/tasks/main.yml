@@ -46,3 +46,22 @@
     name: cryptography
     state: present
 
+- name: Allow non-superusers to capture packets
+  ansible.builtin.debconf:
+    name: wireshark-common
+    question: wireshark-common/install-setuid
+    value: true
+    vtype: boolean
+
+- name: Apply the Wireshark configuration
+  ansible.builtin.command:
+    cmd: dpkg-reconfigure -f noninteractive wireshark-common
+  become: true
+
+- name: Create captures directory
+  ansible.builtin.file:
+    path: /captures
+    state: directory
+    owner: tsharkuser
+    group: tsharkuser
+    mode: '0755'

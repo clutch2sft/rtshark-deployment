@@ -3,8 +3,6 @@
 # Read the environment variable
 CONFIG_FILE="/opt/rtshark-app/.config/rtshark_conf.ini"
 
-mkdir -p /captures
-
 # Get the directory where the script is located
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -162,5 +160,5 @@ echo "$CAPTURE_FILTER"
 #echo $_COMMAND
 
 # Run tshark with the necessary options
-/usr/bin/tshark -i $INTERFACE -f "$CAPTURE_FILTER" -b filesize:$FILE_SIZE_LIMIT -b files:$MAX_FILES -w $CAPTURE_PATH -B $BUFFER_SIZE
+sudo -u tsharkuser /usr/bin/tshark -i $INTERFACE -f "$CAPTURE_FILTER" -b filesize:$FILE_SIZE_LIMIT -b files:$MAX_FILES -w $CAPTURE_PATH -B $BUFFER_SIZE
 #/usr/bin/tshark -i eth0 -f "$CAPTURE_FILTER" -b filesize:$FILE_SIZE_LIMIT -b files:$MAX_FILES -w $CAPTURE_PATH
