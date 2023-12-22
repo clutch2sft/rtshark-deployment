@@ -7,13 +7,12 @@
         name: secrets
   become: yes
   roles:
-    # - environment-setup
-    # - user-setup
+    - environment-setup
+    - user-setup
     - flask-app-deployment
-    # - scripts-setup
-    # - service-setup
-    # - nginx-setup
-    # - app-maintenance
-    # - supervisor-setup
-    # - network-setup
-    # ... other roles
+    - scripts-setup
+    - service-setup
+    - nginx-setup
+    - app-maintenance
+    - supervisor-setup
+    - network-setup

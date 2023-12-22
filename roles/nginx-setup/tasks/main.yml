@@ -16,6 +16,11 @@
     src: files/default.conf
     dest: /etc/nginx/sites-available/default
 
+- name: Deploy Nginx configuration
+  template:
+    src: files/nginx.conf
+    dest: /etc/nginx/nginx.conf
+
 - name: Reload Nginx
   systemd:
     name: nginx
