@@ -15,11 +15,9 @@ def setup_logging():
     log_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     handler = RotatingFileHandler('/var/log/rtshark-app/inapplog.log', maxBytes=10000, backupCount=1)
     handler.setFormatter(log_format)
-    handler.setLevel(logging.DEBUG) 
+    handler.setLevel(logging.INFO) 
     app.logger.addHandler(handler)
-    app.logger.setLevel(logging.DEBUG)
-
-
+    app.logger.setLevel(logging.INFO)
 
 
 app = Flask(__name__)
@@ -33,6 +31,7 @@ login_manager.session_protection = "strong"  # or None
 login_manager.login_view = 'login'
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['REMEMBER_COOKIE_SECURE'] = True
+SETTINGS_PATH="./.config/rtshark_conf.ini"
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -66,9 +65,9 @@ def logout():
     return redirect(url_for('login'))
 
 def set_config_item(section, option, value):
-    config_file = '.config/rtshark_conf.ini'
+    app.logger.debug("Section:" + section + " Option:" + option + " Value:" + value)
+    config_file = SETTINGS_PATH
     config = ConfigParser()
-
     # Create a new file if it doesn't exist
     if not os.path.exists(config_file):
         open(config_file, 'w').close()
@@ -85,7 +84,7 @@ def set_config_item(section, option, value):
 
 def get_config_item(section, option, default=None):
     config = ConfigParser()
-    config_file = '.config/rtshark_conf.ini'  # Update with the path to your config file
+    config_file = SETTINGS_PATH  # Update with the path to your config file
 
     config.read(config_file)
 
@@ -93,6 +92,48 @@ def get_config_item(section, option, default=None):
         return config.get(section, option)
     return default
 
+def add_ip_address(device_ip, device_name):
+    ips = get_available_ips()
+    if device_name in ips:
+        raise ValueError("Device Name already exists")
+    else:
+        ips[device_name] = device_ip
+        save_ips(ips)
+
+
+def remove_ip_address(device_ip):
+    ips = get_available_ips()
+    if device_ip in ips:
+        app.logger.debug(f"I am going to do the delete {device_ip} {ips}")
+        del ips[device_ip]
+        app.logger.debug(f"Now ips: {ips}")
+        save_ips(ips)
+    else:
+        app.logger.debug(f"I didnt find it in ips {device_ip}")
+
+def get_available_ips():
+    config = ConfigParser()
+    config.read(SETTINGS_PATH)
+    if 'Available Filter Addresses' in config:
+        return dict(config['Available Filter Addresses'])
+    return {}
+
+def save_ips(ips):
+    config = ConfigParser()
+    config.read(SETTINGS_PATH)
+
+    if 'Available Filter Addresses' not in config:
+        config.add_section('Available Filter Addresses')
+    else:
+        # Clear existing entries in the section
+        config.remove_section('Available Filter Addresses')
+        config.add_section('Available Filter Addresses')
+
+    for device_name, ip in ips.items():
+        config.set('Available Filter Addresses', device_name, ip)
+
+    with open(SETTINGS_PATH, 'w') as configfile:
+        config.write(configfile)
 
 def get_selected_ips():
     ips = get_config_item('Filter Addresses', 'ip_addresses')
@@ -114,10 +155,14 @@ def control_service(action, filename_prefix):
 
 def get_ip_filter_addresses():
     config = ConfigParser()
-    config.read('./.config/rtshark_conf.ini')
+    config.read(SETTINGS_PATH)
     if 'Available Filter Addresses' in config:
         return config['Available Filter Addresses'].items()
     return []
+
+def set_filter(ip_addresses):
+    ip_addresses_str = ','.join(ip_addresses)
+    set_config_item('Filter Addresses', 'ip_addresses', ip_addresses_str)
 
 @app.route('/control_service', methods=['POST'])
 @login_required
@@ -149,11 +194,6 @@ def handle_set_filter():
     set_filter(selected_ips)
     flash_message = "Selected IP Addresses: " + ', '.join(selected_ips) if selected_ips else "No AGV addresses selected"
     return redirect(url_for('index'))
-
-def set_filter(ip_addresses):
-    ip_addresses_str = ','.join(ip_addresses)
-    set_config_item('Filter Addresses', 'ip_addresses', ip_addresses_str)
-
 
 
 @app.route('/status')
@@ -193,11 +233,27 @@ def list_captures():
 
     return render_template('list_captures.html', capture_files=capture_files)
 
-
 @app.route('/download/<filename>')
 @login_required
 def download_file(filename):
     return send_from_directory('/captures', filename, as_attachment=True)
+
+@app.route('/add_device', methods=['POST'])
+@login_required
+def add_device():
+    device_name = request.form['device_name']
+    device_ip = request.form['device_ip']
+    add_ip_address(device_name, device_ip)
+    return redirect(url_for('index'))
+
+@app.route('/remove_device', methods=['POST'])
+@login_required
+def remove_device():
+    app.logger.debug(f"<<<----------------- IN REMOVE DEVICE --------------------->>>")
+    device_ip = request.form['device_ip']
+    remove_ip_address(device_ip)  # Strip any leading/trailing whitespace
+    app.logger.debug(f"Device IP:{device_ip}")
+    return redirect(url_for('index'))
 
 @app.route('/')
 @login_required
@@ -207,12 +263,6 @@ def index():
     ip_addresses = get_ip_filter_addresses()
     filename_prefix= get_filename_prefix()
     return render_template('index.html', filename_prefix=filename_prefix, selected_ips=selected_ips, ip_addresses=ip_addresses)
-
-
-@app.route('/test')
-@login_required
-def test():
-    return "Test Page - Logged in as: " + current_user.username
 
 
 # @app.route('/set_filename_prefix', methods=['POST'])

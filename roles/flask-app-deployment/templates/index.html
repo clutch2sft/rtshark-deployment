@@ -39,24 +39,46 @@
             <input class="button" type="submit" id="stopButton" name="action" value="Stop Service">
         </form>
     </div>
-    <!-- IP Address Selection with Checkboxes -->
-    <div class="form-section">
-        <form action="/set_filter" method="post">
-            <fieldset>
-                <legend>Select Device/IP to filter on:</legend>
+
+<!-- Add New Device/IP Form -->
+<div class="form-section">
+    <form action="/add_device" method="post">
+        <input type="text" id="newDeviceName" name="device_name" placeholder="Device Name">
+        <input type="text" id="newDeviceIp" name="device_ip" placeholder="Device IP">
+        <input type="submit" value="Add Device">
+    </form>
+</div>
+
+<!-- Device/IP List with Select and Remove Options in Table Format -->
+<div class="form-section">
+    <form action="/set_filter" method="post">
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
+                    <th>Device Name</th>
+                    <th>IP Address</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
                 {% for ip, label in ip_addresses %}
-                <div>
-                    <input type="checkbox" id="ip_{{ loop.index }}" name="ip_addresses" value="{{ ip }}">
-                    <label for="ip_{{ loop.index }}">{{ label }}-->{{ip}}</label>
-                </div>
+                <tr>
+                    <td><input type="checkbox" name="ip_addresses" value="{{ ip }}"></td>
+                    <td>{{ label }}</td>
+                    <td>{{ ip }}</td>
+                    <td><button type="button" onclick="removeDevice('{{ ip }}')">Remove</button></td>
+                </tr>
                 {% endfor %}
-            </fieldset>
-            <input type="submit" value="Set Filter" class="button">
-        </form>
-    </div>
+            </tbody>
+        </table>
+        <input type="submit" value="Set Filter" class="button">
+    </form>
+</div>
 
-    <a href="/list_captures" id="downloadButton" class="button"><button>Download Captures</button></a>
 
+
+<a href="/list_captures" id="downloadButton" class="button"><button>Download Captures</button></a>
     <!-- Service Status -->
     <div>
         <h2>Simple Status</h2>
@@ -79,6 +101,26 @@
         <button class="button" type="submit">Logout</button>
     </form>
     <style>
+        table {
+            width: 100%; /* Full width of the container */
+            border-collapse: collapse; /* For better table styling */
+        }
+
+        th, td {
+            padding: 8px; /* Adjust padding as needed */
+            text-align: left; /* Align text to the left in table cells */
+            border-bottom: 1px solid #ddd; /* Add a bottom border to each cell for clarity */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Light background for headers */
+        }
+
+        /* Optional: Add hover effect for rows */
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
         .status-active {
             color: green;
         }
@@ -176,6 +218,27 @@
     </style>
     
     <script>
+        function toggleSelectAll(source) {
+            checkboxes = document.getElementsByName('ip_addresses');
+            for(var i=0, n=checkboxes.length; i<n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+
+        function removeDevice(ip) {
+            // Send a POST request to remove the device
+            fetch('/remove_device', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'device_ip=' + ip
+            }).then(() => {
+                // Refresh the page or update the list dynamically
+                window.location.reload();
+            });
+        }
+
         function updateStatus() {
             // fetch('/status')
             // .then(response => response.text()) // Get the response text (HTML content)

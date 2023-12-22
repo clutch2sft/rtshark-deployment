@@ -2,10 +2,9 @@ rtshark-app
 
 TODO:
 
-Add addtional auth methods to the app to remove static authentication passwords
-Allow capture interface selection
-Allow online edit of filter ip's
-Address the option to not install a bridge when you want capture on a stick
+>Add addtional auth methods to the app to remove static authentication passwords
+>Allow capture interface selection
+>Address the option to not install a bridge when you want capture on a stick
 
 
 I developed rtshark-app with the specific purpose of facilitating on-site network diagnostics and remote monitoring, particularly for scenarios requiring a portable and deployable packet capture solution. This application is optimized for devices like the Orange Pi R1 and Raspberry Pi, which are ideal for situations where a compact, yet capable, network analysis tool is necessary.  
