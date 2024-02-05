@@ -1,0 +1,12 @@
+---
+# roles/utilities/tasks/main.yml
+
+- name: Copy utility files to pi user's home directory
+  copy:
+    src: "{{ item }}"
+    dest: "/home/pi/{{ item | basename }}"
+    owner: pi
+    group: pi
+    mode: '0755'
+  with_fileglob:
+    - "../files/*"

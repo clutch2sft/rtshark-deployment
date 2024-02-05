@@ -74,7 +74,7 @@ while true; do
             nmcli con down $INTERFACE
             nmcli con mod $INTERFACE ipv4.method auto
             nmcli con up $INTERFACE
-            systemctl restart find_interface_ip_and_set.service
+            systemctl restart find_interface_ip_and_set@br0.service
         else
             log_message "my-ip-monitor" "DEBUG" "No IP conflict detected for $current_ip."
         fi

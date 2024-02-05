@@ -37,14 +37,3 @@
     groups: wireshark
     append: yes
 
-- name: Set capabilities on TShark binary
-  ansible.builtin.command:
-    cmd: setcap 'CAP_NET_RAW+eip CAP_NET_ADMIN+eip' /usr/bin/tshark
-  args:
-    creates: "/usr/bin/tshark"
-
-- name: Change group ownership and set permissions for 'dumpcap'
-  ansible.builtin.file:
-    path: /usr/bin/dumpcap
-    group: wireshark
-    mode: '0750'

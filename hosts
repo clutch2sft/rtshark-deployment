@@ -1,5 +1,5 @@
 all:
   hosts:
     orangepir1plus.lan:
-      ansible_ssh_user: orangepi
+      ansible_ssh_user: root
 
