@@ -1,5 +1,7 @@
 all:
   hosts:
-    orangepir1plus.lan:
+    opi-manb-03.lan:
+      ansible_ssh_user: root
+    opi-manb-04.lan:
       ansible_ssh_user: root
 

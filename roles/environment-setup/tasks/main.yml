@@ -2,6 +2,15 @@
   ansible.builtin.timezone:
     name: America/New_York
 
+- name: Update apt repo
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600  # Optionally, update the cache if it's older than an hour
+
+- name: Upgrade all packages to the latest version
+  apt:
+    upgrade: dist
+
 - name: Install OS dependencies
   apt:
     name:
@@ -11,6 +20,7 @@
       - python3-pip
       - tshark
       - nginx
+      - avahi-daemon
     state: present
 
 - name: Ensure rtshark-app log directory exists
